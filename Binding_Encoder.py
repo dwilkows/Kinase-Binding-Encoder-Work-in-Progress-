@@ -19,21 +19,16 @@ from chembl_webresource_client.new_client import new_client
 def get_chembl_kinase_targets(organism="Homo sapiens"):
     target = new_client.target
 
-    # Use search to find all targets related to 'kinase'
-    # and then filter the queryset down by organism and target type
+   
     kinase_targets = target.search("kinase").filter(
         target_type="SINGLE PROTEIN",
         target_organism=organism
     ).only(["target_chembl_id", "pref_name"])
 
-    # Extract the IDs safely handling the JSON structure
     target_ids = sorted({t["target_chembl_id"] for t in kinase_targets if "target_chembl_id" in t})
 
     print(f"Found {len(target_ids)} human single-protein kinase targets in ChEMBL")
     return target_ids
-
-# Example execution:
-# get_chembl_kinase_targets()
 
 class ChemblBindDataset(Dataset):
     def __init__(self, df):
